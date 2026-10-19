@@ -235,6 +235,411 @@ public class Main {
             );
         }
 
+        
+        System.out.println("\n--- Testing Missing Course ---");
+
+        try {
+            enrollmentService.enrollStudent(101, 999);
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("Enrollment rejected: " + e.getMessage());
+        }
+
+        System.out.println(
+            "Current enrollments: " + enrollmentRepository.size()
+        );
+
+        
+        System.out.println("\n--- Testing Duplicate Enrollment ---");
+
+        try {
+            enrollmentService.enrollStudent(101, 202);
+            System.out.println("Enrollment successful!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Enrollment rejected: " + e.getMessage());
+        }
+
+        System.out.println(
+            "Current enrollments: " + enrollmentRepository.size()
+        );
+
+        
+        // =========================================
+        // COURSE VALIDATION TESTS
+        // =========================================
+
+        System.out.println("\n=== Course Validation Tests ===");
+
+        // Test 1: Valid course
+        Course validCourse = new Course(
+            404, "Object-Oriented Programming", 4
+        );
+
+        System.out.println(
+            "Valid course created: " + validCourse.getName()
+        );
+
+        // Test 2: Invalid ID
+        try {
+            new Course(-1, "Java Programming", 5);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid ID rejected: " + e.getMessage());
+        }
+
+        // Test 3: Blank name
+        try {
+            new Course(405, "   ", 5);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Blank name rejected: " + e.getMessage());
+        }
+
+        // Test 4: Invalid credits
+        try {
+            new Course(406, "Database Systems", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid credits rejected: " + e.getMessage());
+        }
+
+        
+        // =========================================
+        // STUDENT VALIDATION TESTS
+        // =========================================
+
+        System.out.println("\n=== Student Validation Tests ===");
+
+        Student validStudent = new Student(
+            404, "Jordan", 18, 4001, "Software Engineering"
+        );
+
+        System.out.println(
+            "Valid student created: " + validStudent.getName()
+        );
+
+        try {
+            new Student(405, "Jordan", 18, 0, "Software Engineering");
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "Invalid student number rejected: " + e.getMessage()
+            );
+        }
+
+        try {
+            new Student(406, "Jordan", 18, 4002, "   ");
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "Blank course of study rejected: " + e.getMessage()
+            );
+        }
+
+        
+        // =========================================
+        // TEACHER VALIDATION TESTS
+        // =========================================
+
+        System.out.println("\n=== Teacher Validation Tests ===");
+
+        Teacher validTeacher = new Teacher(
+            407, "Morgan", 35, 5001, "Java Programming"
+        );
+
+        System.out.println(
+            "Valid teacher created: " + validTeacher.getName()
+        );
+
+        try {
+            new Teacher(408, "Morgan", 35, 0, "Java Programming");
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "Invalid employee number rejected: " + e.getMessage()
+            );
+        }
+
+        try {
+            new Teacher(409, "Morgan", 35, 5002, "   ");
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "Blank subject rejected: " + e.getMessage()
+            );
+        }
+
+        
+        // =========================================
+        // SERVICE DEPENDENCY VALIDATION TESTS
+        // =========================================
+
+        System.out.println("\n=== Service Dependency Tests ===");
+
+        try {
+            new PersonService(null);
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "PersonService rejected null: " + e.getMessage()
+            );
+        }
+
+        try {
+            new CourseService(null);
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "CourseService rejected null: " + e.getMessage()
+            );
+        }
+
+        try {
+            new EnrollmentService(
+                personRepository,
+                null,
+                enrollmentRepository
+            );
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                "EnrollmentService rejected null: " + e.getMessage()
+            );
+        }
+        
+        try {
+            new EnrollmentService(
+                null, courseRepository, enrollmentRepository
+            );
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null person repository rejected: " + e.getMessage());
+        }
+
+        try {
+            new EnrollmentService(
+                personRepository, courseRepository, null
+            );
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null enrollment repository rejected: " + e.getMessage());
+        }
+
+
+        // =========================================
+        // PERSON ID VALIDATION TESTS
+        // =========================================
+
+
+        
+        System.out.println("\n=== Person ID Validation Tests ===");
+
+        // A valid ID should work.
+        Student validIdStudent = new Student(
+            410, "Jordan", 18, 4010, "Software Engineering" 
+        );
+        System.out.println("Valid person ID accepted: " + validStudent.getId());
+
+        // Zero should be rejected.
+        try {
+            new Student(0, "Jordan", 18, 4011, "Software Engineering");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Zero ID rejected: " + e.getMessage());
+        }
+
+        // A negative ID should also be rejected.
+        try {
+            new Teacher(-5, "Alex", 35, 2001, "Java");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Negative ID rejected: " + e.getMessage());
+        }
+
+        // =========================================
+        // AGE BOUNDARY TESTS
+        // =========================================
+
+
+        
+        System.out.println("\n=== Age Boundary Tests ===");
+
+        // Lower boundary: should succeed
+        try {
+            Student ageZero = new Student(
+                501, "Jordan", 0, 4501, "Software Engineering"
+            );
+            System.out.println("Age 0 accepted: " + ageZero.getAge());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Age 0 rejected: " + e.getMessage());
+        }
+
+        // Upper boundary: should succeed
+        try {
+            Student age120 = new Student(
+                502, "Morgan", 120, 4502, "Computer Science"
+            );
+            System.out.println("Age 120 accepted: " + age120.getAge());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Age 120 rejected: " + e.getMessage());
+        }
+
+        // Below the lower boundary: should fail
+        try {
+            Student ageNegative = new Student(
+            503, "Alex", -1, 4503, "Computer Science"
+        );
+        System.out.println("Age -1 accepted unexpectedly!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Age -1 rejected: " + e.getMessage());
+        }
+
+        // Above the upper boundary: should fail
+        try {
+            Student age121 = new Student(
+                504, "Taylor", 121, 4504, "Computer Science"
+            );
+        System.out.println("Age 121 accepted unexpectedly!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Age 121 rejected: " + e.getMessage());
+        }
+
+        // =========================================
+        // NULL INPUT VALIDATION TESTS
+        // =========================================
+
+        
+        System.out.println("\n=== Null Input Validation Tests ===");
+
+        // Test 1: Null student name
+        try {
+            new Student(601, null, 18, 4601, "Software Engineering");
+            System.out.println("ERROR: Null student name was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null student name rejected: " + e.getMessage());
+        }
+
+        // Test 2: Null course name
+        try {
+            new Course(602, null, 3);
+            System.out.println("ERROR: Null course name was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null course name rejected: " + e.getMessage());
+        }
+
+        // Test 3: Null student course of study
+        try {
+            new Student(603, "Jordan", 18, 4603, null);
+            System.out.println("ERROR: Null course of study was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null course of study rejected: " + e.getMessage());
+        }
+
+        // Test 4: Null teacher subject
+        try {
+            new Teacher(604, "Morgan", 35, 2604, null);
+            System.out.println("ERROR: Null teacher subject was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null teacher subject rejected: " + e.getMessage());
+        }
+
+        // =========================================
+        // REPOSITORY NULL INPUT TESTS
+        // =========================================
+
+        
+        System.out.println("\n=== Repository Null Input Tests ===");
+
+         // PersonRepository
+        try {
+            personRepository.add(null);
+            System.out.println("ERROR: Null person was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null person rejected: " + e.getMessage());
+        }
+
+        // CourseRepository
+        try {
+            courseRepository.add(null);
+            System.out.println("ERROR: Null course was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null course rejected: " + e.getMessage());
+        }
+
+        // EnrollmentRepository
+        try {
+            enrollmentRepository.add(null);
+            System.out.println("ERROR: Null enrollment was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Null enrollment rejected: " + e.getMessage());
+        }
+
+        // =========================================
+        // AGE MUTATION VALIDATION TESTS
+        // =========================================
+
+
+        
+        System.out.println("\n=== Age Mutation Validation Test ===");
+
+        Student ageTestStudent = new Student(
+            505, "Celia", 18, 4505, "Software Engineering"
+        );
+
+        System.out.println("Age before invalid update: " + ageTestStudent.getAge());
+
+        try {
+            ageTestStudent.setAge(150);
+            System.out.println("ERROR: Invalid age was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid age rejected: " + e.getMessage());
+        }
+
+        System.out.println("Age after invalid update: " + ageTestStudent.getAge());
+
+        
+        // =========================================
+        // TEACHER ENROLLMENT TESTS
+        // =========================================
+
+        System.out.println("\n--- Testing Teacher Enrollment ---");
+
+        int countBefore = enrollmentRepository.size();
+
+        try {
+            enrollmentService.enrollStudent(205, 101);
+            System.out.println("ERROR: Teacher enrollment was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Teacher enrollment rejected: " + e.getMessage());
+        }
+
+        System.out.println("Enrollments before: " + countBefore);
+        System.out.println("Enrollments after: " + enrollmentRepository.size());
+
+        // =========================================
+        // MISSING PERSON TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Missing Person ---");
+
+        int countBeforeMissingPerson = enrollmentRepository.size();
+
+        try {
+            enrollmentService.enrollStudent(999, 101);
+            System.out.println("ERROR: Enrollment with missing person was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Missing person rejected: " + e.getMessage());
+        }
+
+        System.out.println("Enrollments before: " + countBeforeMissingPerson);
+        System.out.println("Enrollments after: " + enrollmentRepository.size());
+
+        // =========================================
+        // VALIDATION ERROR TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Validation Order ---");
+
+        int countBeforeOrderTest = enrollmentRepository.size();
+
+        try {
+            enrollmentService.enrollStudent(205, 999);
+            System.out.println("ERROR: Invalid enrollment was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("First validation error: " + e.getMessage());
+        }
+
+        System.out.println("Enrollments before: " + countBeforeOrderTest);
+        System.out.println("Enrollments after: " + enrollmentRepository.size());
+
         System.out.println("\nAll tests completed!");
     }
 }

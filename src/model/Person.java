@@ -6,6 +6,11 @@ public abstract class Person {
     private int age;
 
     public Person(int id, String name, int age){
+        if ( id <= 0){
+            throw new IllegalArgumentException (
+                "Person ID must be positive."
+            );
+        }
         this.id = id;
         setName(name);
         setAge(age);

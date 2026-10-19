@@ -6,6 +6,17 @@ public class Teacher extends Person {
 
     public Teacher (int id, String name, int age, int employeeNumber, String subject){
         super(id, name, age);
+
+        if(employeeNumber <= 0){
+            throw new IllegalArgumentException(
+                "Employee number must be positive."
+            );
+        }
+        if(subject == null || subject.isBlank()){
+            throw new IllegalArgumentException(
+                "Subject cannot be empty."
+            );
+        }
         this.employeeNumber = employeeNumber;
         this.subject = subject;
     }

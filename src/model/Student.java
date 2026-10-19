@@ -6,6 +6,16 @@ public class Student extends Person {
 
     public Student(int id, String name, int age, int studentNumber, String courseOfStudy){
         super(id, name, age);
+        if(studentNumber <= 0){
+            throw new IllegalArgumentException (
+                "Student number must be positive."
+            );
+        }
+        if(courseOfStudy == null || courseOfStudy.isBlank()){
+            throw new IllegalArgumentException(
+                "Course of study cannot be empty."
+            );
+        }
         this.studentNumber = studentNumber;
         this.courseOfStudy = courseOfStudy;
     }

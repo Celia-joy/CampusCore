@@ -15,6 +15,22 @@ public class EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
 
     public EnrollmentService (PersonRepository personRepository, CourseRepository courseRepository, EnrollmentRepository enrollmentRepository){
+        if(personRepository == null){
+            throw new IllegalArgumentException(
+                "PersonRepository cannot be null."
+            );
+        }
+        if(courseRepository == null){
+            throw new IllegalArgumentException(
+                "CourseRepository cannot be null."
+            );
+        }
+
+        if( enrollmentRepository == null){
+            throw new IllegalArgumentException(
+                "EnrollmentRepository cannot be null."
+            );
+        }
         this.personRepository = personRepository;
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
