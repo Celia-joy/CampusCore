@@ -37,6 +37,17 @@ public class EnrollmentService {
     }
 
     public void enrollStudent(int studentId, int courseId){
+        if (studentId <= 0){
+            throw new IllegalArgumentException(
+                "Student ID must be positive."
+            );
+        }
+
+        if (courseId <= 0){
+            throw new IllegalArgumentException(
+                "Course ID must be positive."
+            );
+        }
 
         Person person = personRepository.findById(studentId);
         if(person == null){

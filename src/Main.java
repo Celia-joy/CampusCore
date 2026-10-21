@@ -640,6 +640,103 @@ public class Main {
         System.out.println("Enrollments before: " + countBeforeOrderTest);
         System.out.println("Enrollments after: " + enrollmentRepository.size());
 
+        // =========================================
+        // INVALID STUDENT ID TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Invalid Student ID ---");
+
+        int countBeforeInvalidStudentId = enrollmentRepository.size();
+
+        try {
+            enrollmentService.enrollStudent(0, 101);
+            System.out.println("ERROR: Invalid student ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid student ID rejected: " + e.getMessage());
+        }
+
+        System.out.println("Enrollments before: " + countBeforeInvalidStudentId);
+        System.out.println("Enrollments after: " + enrollmentRepository.size());
+
+        // =========================================
+        // INVALID COURSE ID TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Invalid Course ID ---");
+
+        int countBeforeInvalidCourseId = enrollmentRepository.size();
+
+        try {
+            enrollmentService.enrollStudent(101, -1);
+            System.out.println("ERROR: Invalid course ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid course ID rejected: " + e.getMessage());
+        }
+
+        System.out.println("Enrollments before: " + countBeforeInvalidCourseId);
+        System.out.println("Enrollments after: " + enrollmentRepository.size());
+
+        // =========================================
+        // ENROLLMENT LOOKUP VALIDATION TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Enrollment Lookup Validation ---");
+
+        // Valid IDs, but no matching enrollment
+        Enrollment missingEnrollment =
+            enrollmentRepository.findByStudentAndCourse(101, 999);
+
+            System.out.println("Missing enrollment: " + missingEnrollment);
+
+        // Invalid student ID
+        try {
+            enrollmentRepository.findByStudentAndCourse(0, 202);
+            System.out.println("ERROR: Invalid student ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid lookup student ID rejected: " + e.getMessage());
+        }
+
+        // Invalid course ID
+        try {
+            enrollmentRepository.findByStudentAndCourse(101, -1);
+            System.out.println("ERROR: Invalid course ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid lookup course ID rejected: " + e.getMessage());
+        }
+
+        // =========================================
+        // ENROLLMENT CONSTRUCTOR VALIDATION TESTS
+        // =========================================
+
+        
+        System.out.println("\n--- Testing Enrollment Constructor Validation ---");
+
+        try {
+            new Enrollment(0, 101);
+            System.out.println("ERROR: Invalid student ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid student ID rejected: " + e.getMessage());
+        }
+
+        try {
+            new Enrollment(101, -1);
+            System.out.println("ERROR: Invalid course ID was accepted!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid course ID rejected: " + e.getMessage());
+        }
+
+        Enrollment validEnrollment = new Enrollment(101, 202);
+        System.out.println(
+            "Valid enrollment created: Student "
+            + validEnrollment.getStudentId()
+            + " -> Course "
+            + validEnrollment.getCourseId()
+        );
+
+
         System.out.println("\nAll tests completed!");
     }
 }
