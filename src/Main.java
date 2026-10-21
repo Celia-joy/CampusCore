@@ -426,7 +426,7 @@ public class Main {
         Student validIdStudent = new Student(
             410, "Jordan", 18, 4010, "Software Engineering" 
         );
-        System.out.println("Valid person ID accepted: " + validStudent.getId());
+        System.out.println("Valid person ID accepted: " + validIdStudent.getId());
 
         // Zero should be rejected.
         try {
