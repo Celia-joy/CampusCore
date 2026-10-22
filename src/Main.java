@@ -13,11 +13,18 @@ import service.PersonService;
 import service.CourseService;
 import service.EnrollmentService;
 
+
+import tests.EnrollmentTests;
+import tests.CourseTests;
+
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        EnrollmentTests.testConstructorValidation();
+        CourseTests.testCourseValidation();
 
         // =========================================
         // PERSON REPOSITORY TESTS
@@ -263,44 +270,6 @@ public class Main {
             "Current enrollments: " + enrollmentRepository.size()
         );
 
-        
-        // =========================================
-        // COURSE VALIDATION TESTS
-        // =========================================
-
-        System.out.println("\n=== Course Validation Tests ===");
-
-        // Test 1: Valid course
-        Course validCourse = new Course(
-            404, "Object-Oriented Programming", 4
-        );
-
-        System.out.println(
-            "Valid course created: " + validCourse.getName()
-        );
-
-        // Test 2: Invalid ID
-        try {
-            new Course(-1, "Java Programming", 5);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid ID rejected: " + e.getMessage());
-        }
-
-        // Test 3: Blank name
-        try {
-            new Course(405, "   ", 5);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Blank name rejected: " + e.getMessage());
-        }
-
-        // Test 4: Invalid credits
-        try {
-            new Course(406, "Database Systems", 0);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid credits rejected: " + e.getMessage());
-        }
-
-        
         // =========================================
         // STUDENT VALIDATION TESTS
         // =========================================
@@ -706,36 +675,6 @@ public class Main {
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid lookup course ID rejected: " + e.getMessage());
         }
-
-        // =========================================
-        // ENROLLMENT CONSTRUCTOR VALIDATION TESTS
-        // =========================================
-
-        
-        System.out.println("\n--- Testing Enrollment Constructor Validation ---");
-
-        try {
-            new Enrollment(0, 101);
-            System.out.println("ERROR: Invalid student ID was accepted!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid student ID rejected: " + e.getMessage());
-        }
-
-        try {
-            new Enrollment(101, -1);
-            System.out.println("ERROR: Invalid course ID was accepted!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid course ID rejected: " + e.getMessage());
-        }
-
-        Enrollment validEnrollment = new Enrollment(101, 202);
-        System.out.println(
-            "Valid enrollment created: Student "
-            + validEnrollment.getStudentId()
-            + " -> Course "
-            + validEnrollment.getCourseId()
-        );
-
 
         System.out.println("\nAll tests completed!");
     }
